@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+
+    <style type="text/css">
+        html, body {
+            height: 100%;
+        }
+    </style>
+
+</head>
+<body>
+<div class="container w-25" style="margin: auto;">
+    <div class="row mt-5">
+        <h4>Add services</h4>
+    </div>
+    <div class="row mt-5">
+        <input type="hidden" name="userId" id="userName" th:value="${user.getUserName()}">
+        <form id="addServicesForm">
+            <div class="row" th:each="service: ${services}">
+                <input name="serviceName" class="mt-1 mr-2" type="checkbox" th:id="${service}" th:value="${service}">
+                <label th:text="${service}" th:for="${service}"></label>
+            </div>
+            <div class="row mt-3">
+                <input type="submit" value="Add services" class="form-control btn btn-primary">
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+<script>
+    const addServiceForm = document.getElementById('addServicesForm');
+    addServiceForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const formData = new FormData(addServiceForm).entries();
+        var array = [];
+        $("input:checkbox[name=serviceName]:checked").each(function() {
+            array.push($(this).val());
+        });
+        const data = JSON.stringify({ serviceName : array});
+        console.log(data);
+        $.ajax({
+            url: '/users/' + $('#userName').val() + '/services',
+            type: 'POST',
+            contentType:"application/json",
+            data: data,
+            success : function(response) {
+                console.log(response);
+            }
+        });
+    });
+</script>
+</html>

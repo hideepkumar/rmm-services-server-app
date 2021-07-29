@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+
+    <style type="text/css">
+        html, body {
+            height: 100%;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="container w-25" style="margin: auto;">
+        <div class="row mt-5">
+            <label th:text="${user.firstName + ' ' + user.lastName}"></label>
+        </div>
+
+        <div class="col mt-5">
+            <div>
+                <label class="h5">Selected services</label>
+            </div>
+            <div th:each="service: ${user.services}">
+                <label  th:text="${service.serviceID.serviceName}"></label>
+                <a href="#" onclick="deleteService(this); return false;" th:id="${user.userName + '_' + service.serviceID.serviceName}">Delete</a>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col">
+                <a th:href="${'devices/' + user.userName}">Devices</a>
+            </div>
+            <div class="col">
+                <a href="/services">Services</a>
+            </div>
+        </div>
+
+        <div class="row mt-3 justify-content-center" id="result">
+
+        </div>
+
+        <div class="row mt-5">
+            <div class="col mt-5" id="addDeviceDiv">
+                <input type="hidden" name="userId" id="userName" th:value="${user.getUserName()}">
+                <form id="addDeviceForm">
+                    <div>
+                        <h4>Add device</h4>
+                    </div>
+                    <div class="mt-3">
+                        <input class="form-control" type="text" placeholder="Device Identifier" name="deviceId">
+                    </div>
+                    <div class="mt-3">
+                        <input class="form-control" type="text" placeholder="System Name" name="systemName">
+                    </div>
+                    <div class="mt-3">
+                        <select name="deviceType" class="form-control">
+                            <option th:each="device: ${deviceTypes}" th:value="${device}"th:text="${device}"/>
+                        </select>
+                    </div>
+                    <div class="mt-3">
+                        <button class="form-control btn btn-primary" type="submit">Submit</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+
+    </div>
+<script type="text/javascript">
+    function getServices() {
+        $.ajax({
+            url: '/services',
+            type: 'GET',
+            contentType:"application/json",
+            data: "",
+            success : function(response) {
+                console.log(response);
+                $('#result').empty();
+                $('#result').html(response);
+            }
+        });
+    }
+
+    function deleteService(elem) {
+        console.log(elem.id.replace("_", "/"));
+        const deleteURL = '/deleteService/' + elem.id.replace("_", "/");
+        $.ajax({
+            url: deleteURL,
+            type: 'POST',
+            contentType:"application/json",
+            data: "",
+            success : function(response) {
+                console.log(response);
+            }
+        });
+    }
+
+    const addDeviceForm = document.getElementById('addDeviceForm');
+    addDeviceForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const formData = new FormData(addDeviceForm).entries();
+        const data = JSON.stringify(Object.fromEntries(formData));
+        $.ajax({
+            url: '/users/' + $('#userName').val() + '/devices',
+            type: 'POST',
+            contentType:"application/json",
+            data: data,
+            success : function(response) {
+                console.log(response);
+            }
+        });
+    });
+</script>
+</body>
+</html>
