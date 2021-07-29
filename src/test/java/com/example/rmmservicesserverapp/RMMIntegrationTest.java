@@ -28,6 +28,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource (locations = "classpath:application.properties")
 public class RMMIntegrationTest {
 
+    /**
+     * [CURL commands to test the REST endpoint outside of work-environment]
+     * curl --data "username=ninja&password=Ninja" --cookie-jar cookie -X POST http://localhost:8090/processLogin
+     * curl --cookie cookie -u ninja:Ninja -X GET http://localhost:8090/devices/ninja
+     *
+     *
+     */
+
     private static String USER = "ninja";
 
     private enum SERVICE {
