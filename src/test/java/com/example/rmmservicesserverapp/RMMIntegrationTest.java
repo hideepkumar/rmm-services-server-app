@@ -56,8 +56,9 @@ public class RMMIntegrationTest {
     @WithMockUser("USER")
     @Test
     public void testAddService() throws Exception {
+        String serviceName = SERVICE.Teamviewer.name();
         MvcResult result = mockMvc.perform(
-                MockMvcRequestBuilders.post("/users/"+USER+"/services/" + SERVICE.Teamviewer.name())
+                MockMvcRequestBuilders.post("/users/"+USER+"/services/" + serviceName)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
     }
