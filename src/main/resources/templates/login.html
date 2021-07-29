@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+
+    <style type="text/css">
+        html, body {
+            height: 100%;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="container row justify-content-center" style="margin: auto;">
+        <form method="post" action="processLogin">
+
+            <div class="col mt-5">
+                <div>
+                    <h4>User Login</h4>
+                </div>
+                <div class="mt-3">
+                    <input class="form-control" type="text" placeholder="Username" name="username" value="ninja">
+                </div>
+                <div class="mt-3">
+                    <input class="form-control" type="password" placeholder="Password" name="password" value="Ninja">
+                </div>
+                <div class="mt-3">
+                    <button class="form-control btn btn-primary" type="submit">Submit</button>
+                </div>
+                <div class="mt-3">
+                    <th:block th:if="${param.error}">
+                        <h5 style="color: red">Invalid user name or password</h5>
+                    </th:block>
+                </div>
+            </div>
+
+        </form>
+
+
+    </div>
+
+
+</form>
+</body>
+</html>
